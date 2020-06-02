@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ username }}'s Blog</title>
+</head>
+
+<body>
+    
+    <form action="{{url_for('home')}}" method="POST">
+        <h2>Please enter the following details</h2>
+        Text Color: <input name="text-color">
+        BackGround Color : <input name="background-color">
+        Text: <input name="text">
+        <button type="submit">Submit</button>
+        {% if color != None %}
+        <div style="background-color: {{ backgroundColor }};color: {{ textColor }};">
+            <h2>{{ text }}</h2>
+        </div>
+           
+        {% endif %}
+
+    </form>
+</body>
+</html>
