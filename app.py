@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -22,27 +22,49 @@ db = scoped_session(sessionmaker(bind=engine))
 app = Flask(__name__)
 textColor = ""
 backgroundColor = ""
-text = ""
+Text = ""
 #Variable declaration for Login
 entered_username = " "
 entered_password = " "
 admin_user = "Admin"
 admin_password = "Admin123"
 status=False
+#For maintaining a list
+text=[]
+backgroundcolor = []
+textcolor = []
+
 
 @app.route('/home', methods=["GET", "POST"])
 def home():
-    global textColor,backgroundColor, text
-    print(request.method)
+    global textColor,backgroundColor, text,entered_username, text, backgroundcolor, textcolor
+    print(entered_username)
     if request.method == "POST":
         textColor = request.form.get('text-color')
+        #the list
+        textcolor.append(textColor)
         backgroundColor = request.form.get('background-color')
-        text = request.form.get('text')
-    return render_template('base.html', textColor=textColor,backgroundColor = backgroundColor, text=text ,username="Himanshu" )
+        #the list
+        backgroundcolor.append(backgroundColor)
+        Text = request.form.get('text')
+        #the list
+        text.append(Text)     
+        return render_template('home.html',textColor=textcolor,backgroundColor=backgroundcolor,text=text,username=entered_username, length=len(textcolor) )
+    else:
+        return render_template('home.html', username = entered_username, length=len(textcolor) )
+
+@app.route('/', methods=["GET"])
+def index():
+    print(request.method)
+    if request.method == "POST":
+        return redirect(url_for('login'))
+    return render_template('login.html',error_message= "", status=status)
 
 
-@app.route('/', methods=["GET","POST"])
+
+@app.route('/login', methods=["POST"])
 def login():
+    print(request.method)
     global entered_password, entered_username
     entered_username = request.form.get('email')
     entered_password = request.form.get('pass')
@@ -71,9 +93,14 @@ def login():
                 if entered_password == user_password:
                     return redirect(url_for('home'))
                 else:
-                    return render_template('login.html', error_message="Invalid username or password.")	
+                    
+                    return render_template('login.html', error_message="Invalid username or password.")
+                    return redirect(url_for('index'))
+
             else:
+                
                 return render_template('login.html', error_message="Invalid username or password.")
+                return redirect(url_for('index'))
     else:
         return render_template('login.html',error_message= "", status=status)
 

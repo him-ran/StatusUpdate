@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    
+    <form action="{{url_for('home')}}" method="POST">
+                <h2>Please enter the following details</h2>
+                <!--For text color -->
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" required type="text" name="text-color">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">Please enter your favourite color</span>
+                </div>
+                <!--For background color -->
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" required type="text" name="background-color">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">Please enter your favourite background-color</span>
+                </div>
+                <!--For the message -->
+                <div class="wrap-input100 validate-input">
+                    <input class="input100" required type="text" name="text">
+                    <span class="focus-input100"></span>
+                    <span class="label-input100">Please type in your message</span>
+                </div>
+                <!--for the submit button-->
+                <div class="container-login100-form-btn">
+                    <button type="submit" class="login100-form-btn">
+                        Submit
+                    </button>
+                </div>
+                <br>
+                <!-- For the message display -->
+                {% if length != None %}
+                {% for i in range(0, length) %}
+                <div style="background-color: {{ backgroundColor[i] }};color: {{ textColor[i] }};margin: 10px">
+                    <h4>{{ text[i] }}</h4>
+                    <h5>By, {{ username }}</h5>
+                </div>
+                <br>
+                {% endfor %}
+                {% endif %}         
+    </form>
+{% endblock %}
