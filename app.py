@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
