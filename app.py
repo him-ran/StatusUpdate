@@ -20,6 +20,7 @@ engine = create_engine(os.getenv('DATABASE_URL'))
 db = scoped_session(sessionmaker(bind=engine))
 
 app = Flask(__name__)
+
 textColor = ""
 backgroundColor = ""
 Text = ""
@@ -29,30 +30,45 @@ entered_password = " "
 admin_user = "Admin"
 admin_password = "Admin123"
 status=False
-#For maintaining a list
-text=[]
-backgroundcolor = []
-textcolor = []
 
-
+'''This is for the homepage'''
 @app.route('/home', methods=["GET", "POST"])
 def home():
-    global textColor,backgroundColor, text,entered_username, text, backgroundcolor, textcolor
-    print(entered_username)
+    messageList=[]
+    backgroundcolorList = []
+    textcolorList = []
+    userlist=[]
+    global textColor,backgroundColor, text, entered_username, text, backgroundcolor, textcolor
     if request.method == "POST":
         textColor = request.form.get('text-color')
-        #the list
-        textcolor.append(textColor)
         backgroundColor = request.form.get('background-color')
-        #the list
-        backgroundcolor.append(backgroundColor)
-        Text = request.form.get('text')
-        #the list
-        text.append(Text)     
-        return render_template('home.html',textColor=textcolor,backgroundColor=backgroundcolor,text=text,username=entered_username, length=len(textcolor) )
-    else:
-        return render_template('home.html', username = entered_username, length=len(textcolor) )
+        message = request.form.get('text')
+        '''Insert into Db for the css property'''
+        db.execute("INSERT INTO css (textcolor, backgroundcolor, message, loginuser) VALUES (:textcolor, :backgroundcolor, :message, :loginuser)", {"textcolor": textColor, "backgroundcolor": backgroundColor, "message":message, "loginuser":entered_username})
+        db.commit()
 
+        #Need to fetch all the data stored values in the db\
+        
+        cssProperties = db.execute("SELECT * FROM css").fetchall()
+        for prop in cssProperties:
+            textcolorList.append(prop.textcolor)
+            backgroundcolorList.append(prop.backgroundcolor)
+            messageList.append(prop.message)  
+            userlist.append(prop.loginuser)
+
+        return render_template('home.html',textColor=textcolorList, backgroundColor=backgroundcolorList, text=messageList, userlist=userlist, username=entered_username, length=len(textcolorList) )
+    elif request.method == "GET":
+        cssProperties = db.execute("SELECT * FROM css").fetchall()
+        for prop in cssProperties:
+            textcolorList.append(prop.textcolor)
+            backgroundcolorList.append(prop.backgroundcolor)
+            messageList.append(prop.message)
+            userlist.append(prop.loginuser)    
+        return render_template('home.html',textColor=textcolorList, backgroundColor=backgroundcolorList, text=messageList,userlist=userlist, username=entered_username, length=len(textcolorList) )
+    else:
+        return render_template('home.html', username = entered_username, length=len(textcolorList) )
+
+'''This is for the root page'''
 @app.route('/', methods=["GET"])
 def index():
     print(request.method)
@@ -61,7 +77,7 @@ def index():
     return render_template('login.html',error_message= "", status=status)
 
 
-
+'''This is for the login page'''
 @app.route('/login', methods=["POST"])
 def login():
     print(request.method)
@@ -103,6 +119,62 @@ def login():
                 return redirect(url_for('index'))
     else:
         return render_template('login.html',error_message= "", status=status)
+
+'''This is for the recover page'''
+@app.route('/recover', methods=["GET","POST"])
+def recover():
+    if request.method == "POST":
+        recovery_email = request.form.get("recovery_email")
+        email_received = sendEmail(recovery_email)
+        if email_received:
+            return render_template('recover.html',message="Success")
+        else:
+            return render_template('recover.html',message="Failure")
+        
+    else:
+        return render_template('recover.html')
+
+@app.route('/register', methods=["GET", "POST"])
+def register():
+	if request.method == "POST":
+		registered_username = request.form.get('username')
+		registered_password = request.form.get('psw')
+		registered_confirm_password = request.form.get('psw-repeat')		
+		#For matching both the password entered.
+		if registered_password != registered_confirm_password:
+			return render_template('register.html',failure_message="Password's dont match")
+		#For adding the newly added user in the DB.
+		else:
+			#Before adding in the Db , check if the username already exists
+			users = db.execute("SELECT * FROM users").fetchall()
+			for user in users:
+				#User already exists display output
+				if registered_username == user.username:
+					return render_template('register.html',failure_message="User already exists. Please enter a different username.") 		
+			#Addign the user in the DB.
+			db.execute("INSERT INTO users (username, password) VALUES (:username, :password)", {"username": registered_username, "password": registered_password})
+			db.commit()					
+		#For validation of the actual addition of the user
+		users = db.execute("SELECT * FROM users").fetchall()
+		if len(users) == 0:
+			return render_template('error.html', error_message="User not added successfully in the DB.")
+		else:
+			for user in users:
+				#To check for the username in the complete arrray of users and then update the matchStatus flag.
+				if user.username == registered_username:
+					matchStatus = True
+				else:
+					matchStatus=False	
+		#Final check for the validation of the user in the DB.			
+		if matchStatus:
+			return render_template('register.html',success_message="User successfully added.")
+		else:
+			return render_template('register.html',failure_message="Error while user addition")
+	return render_template('register.html')
+
+#This function is for sending of email
+def sendEmail(email):
+        return 'True'
 
 if __name__ == "__main__":
 	app.run()

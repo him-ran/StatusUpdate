@@ -38,15 +38,15 @@
 						Your Words
 					</span>			
 					
-								<!--For the email text box-->
-								<div class="login-wrap-input100 validate-input">
-									<input class="input100" required type="text" name="email">
+								<!--For the username text box-->
+								<div class="login-wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+									<input class="input100 has-val" type="text" name="email">
 									<span class="focus-input100"></span>
-									<span class="label-input100">Email</span>
+									<span class="label-input100">Username</span>
 								</div>
-								<div class="login-wrap-input100 validate-input">
+								<div class="login-wrap-input100 validate-input" data-validate="Password is required">
 									<!--For the Password text box-->
-									<input class="input100" required type="password" name="pass">
+									<input class="input100 has-val" type="password" name="pass">
 									<span class="focus-input100"></span>
 									<span class="label-input100">Password</span>
 								</div>
@@ -60,9 +60,10 @@
 										</label>
 									</div>			
 									<div>
-										<a href="#" class="txt1">
-											Forgot Password?
-										</a>
+											<a href="{{url_for('recover')}}" class="txt1">
+												Forgot Password?
+											</a>
+										
 									</div>
 								</div>
 						
@@ -70,6 +71,11 @@
 									<button type="submit" class="login100-form-btn">
 										Login
 									</button>
+								</div>
+								<div style="text-align: center;">
+									
+										Dont have an account,<a href="{{url_for('register')}}"><b>Sign in</b></a>
+								
 								</div>
 								{% if error_message != None %}
 									{{ error_message }}
