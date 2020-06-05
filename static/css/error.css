@@ -1,0 +1,12 @@
+.error {
+    text-align: center;
+    color: red;
+    font-size: xx-large;
+    background-color: white;
+    width: 50%;
+    height: 50%;
+    padding: 5%;
+    margin: 50px;
+    margin-left: 27%;
+    margin-top: 5%;
+}

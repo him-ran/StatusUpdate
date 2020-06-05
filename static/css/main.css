@@ -405,7 +405,7 @@ input.input100 {
 
 .input100:focus + .focus-input100 + .label-input100 {
   top: 14px;
-  font-size: 13px;
+  font-size: 10px;
 }
 
 .has-val {
@@ -641,6 +641,10 @@ input.input100 {
   background-color: olivedrab;
   color: white;
 }
+ .header button {
+  float: right;
+  padding: 20px;
+ }
 
 .footer{
   width: 100%;
@@ -648,3 +652,4 @@ input.input100 {
   background-color: wheat;
   color: black;
 }
+ 
