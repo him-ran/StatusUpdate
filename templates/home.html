@@ -6,24 +6,33 @@
                 <h4 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Hello to Your Words: </h4>
                 <hr>
                 <p>
-                    <b>So, how this works is, you have to select your favourite text color, favourite background-color and a message which you want to display or convey to someone you want.
-                    You can write any message you want in the textboxes provided below.</b>
+                    <b>So, how this works is, you have to type a message which you want to display or convey to someone you want.
+                    You can write any message you want in the textbox provided below.</b>
                 </p>
+                <div>
+                    Select an image from below to choose your best background-image
+                    <div style="display: flex">
+                        {% for image in imagesList %}
+                        
+                            {% if '.jpeg' in image %}
+                            
+                                <div style="margin: 8px;">
+                                    <img style="width: 300px;height: 300px;" src="../static/images/{{image}}">
+                                    <form action="{{ url_for('backgroundselection', img_name=image)}}", method="POST">
+                                        <button>Select</button>
+                                    </form>
+                                </div>
+                            
+                            {% endif %}
+                        {% endfor %}
+                    
+                    </div>
+                    
+                </div>
                 <!--For text color -->
                 <div style="display: flex">
-                    <div style="margin: 10px" class="wrap-input100 validate-input" >
-                        <input class="input100 has-val"  type="text" name="text-color">
-                        <span class="focus-input100"></span>
-                        <span class="label-input100">Text color</span>
-                    </div>
-                    <!--For background color -->
-                    <div style="margin: 10px" class="wrap-input100 validate-input">
-                        <input class="input100  has-val"  type="text" name="background-color">
-                        <span class="focus-input100"></span>
-                        <span class="label-input100">Background-color</span>
-                    </div>
                     <!--For the message -->
-                    <div style="margin: 10px" class="wrap-input100 validate-input ">
+                    <div style="margin: 10px;margin-left: 40%" class="wrap-input100 validate-input ">
                         <input class="input100 has-val"  type="text" name="text">
                         <span class="focus-input100"></span>
                         <span class="label-input100">Message</span>
@@ -39,12 +48,17 @@
                 <!-- For the message display -->
                 {% if length != None %}
                 <div style="display: flex;flex-wrap: wrap;">
-                    {% for i in range(0, length) %}
-                        <div style="background-color: {{ backgroundColor[i] }};color: {{ textColor[i] }};margin: 10px;border-radius:10px; text-align:center; height:200px; padding: 10px">
-                            <h4>{{ text[i] }}</h4>
-                            <h5>By, {{ userlist[i] }}</h5>
+                    {% for i in fetchedList %}
+                        <div class="fetchllist onhover">
+                            <h4>{{ i.message }}</h4>
+                            <h5 style="padding-top: 130px;">By, {{ i.loginuser }}</h5>
                         </div>
-                    <br>
+                        <form action="{{ url_for('delete_post', id=i.id)}}" method="POST">
+                            <div>
+                                <button>Delete</button>
+                            </div>
+                        </form>
+                        
                     {% endfor %}
                 </div>                
                 {% endif %}         

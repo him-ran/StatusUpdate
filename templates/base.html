@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ username }}'s Thoughts</title>
+    <title>{{ username.capitalize()  }}'s Thoughts</title>
     <!--===============================================================================================-->	
 	<link rel="icon" href="{{ url_for('static', filename='images/icons/favicon.ico') }}">
     <!--===============================================================================================-->
@@ -26,12 +26,13 @@
     <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slideshow.css') }}">
     <!--===============================================================================================-->
 </head>
 <!--Code for header-->
 <nav class="header">
-    This is the header
-    <button style="float: right;" class="btn"><a href="{{url_for('index')}}">Logout</a></button>
+    Your Work,
+    <button style="float: right; color: antiquewhite;"><a href="{{url_for('index')}}">Logout</a></button>
 </nav>
 <body>
     {% block body %}

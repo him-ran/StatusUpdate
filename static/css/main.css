@@ -652,4 +652,16 @@ input.input100 {
   background-color: wheat;
   color: black;
 }
- 
+
+.fetchllist {
+  background-image: url("../images/background1.jpeg");
+  margin: 10px;
+  border-radius:10px; 
+  text-align:center;
+   height:200px; 
+   padding: 10px; 
+   background-size:cover;
+}
+.onhover:hover{
+  color:white
+}

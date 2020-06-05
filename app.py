@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -21,55 +21,43 @@ db = scoped_session(sessionmaker(bind=engine))
 
 app = Flask(__name__)
 
-textColor = ""
-backgroundColor = ""
-Text = ""
 #Variable declaration for Login
 entered_username = " "
 entered_password = " "
 admin_user = "Admin"
 admin_password = "Admin123"
 status=False
+img_name=""
 
 '''This is for the homepage'''
 @app.route('/home', methods=["GET", "POST"])
 def home():
+    print(img_name)
+    idList = []
     messageList=[]
-    backgroundcolorList = []
-    textcolorList = []
     userlist=[]
-    global textColor,backgroundColor, text, entered_username, text, backgroundcolor, textcolor
+    #get the images list
+    imagesList = os.getcwd()
+    imagesList = (os.listdir(imagesList + "/static/images"))
+    global entered_username
     if entered_username == None or entered_username == " " :
             return render_template('error.html', error_message="Please login first")
     if request.method == "POST":
-        
-        textColor = request.form.get('text-color')
-        backgroundColor = request.form.get('background-color')
+        #To fetch the values from the textbox
         message = request.form.get('text')
+        print(message)
         '''Insert into Db for the css property'''
-        db.execute("INSERT INTO css (textcolor, backgroundcolor, message, loginuser) VALUES (:textcolor, :backgroundcolor, :message, :loginuser)", {"textcolor": textColor, "backgroundcolor": backgroundColor, "message":message, "loginuser":entered_username})
+        db.execute("INSERT INTO css (message, loginuser) VALUES (:message, :loginuser)", {"message":message, "loginuser":entered_username})
         db.commit()
 
-        #Need to fetch all the data stored values in the db\
-        
+        #Need to fetch all the data stored values in the db\        
         cssProperties = db.execute("SELECT * FROM css").fetchall()
-        for prop in cssProperties:
-            textcolorList.append(prop.textcolor)
-            backgroundcolorList.append(prop.backgroundcolor)
-            messageList.append(prop.message)  
-            userlist.append(prop.loginuser)
-
-        return render_template('home.html',textColor=textcolorList, backgroundColor=backgroundcolorList, text=messageList, userlist=userlist, username=entered_username, length=len(textcolorList) )
+        return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username, imagesList=imagesList )
     elif request.method == "GET":
         cssProperties = db.execute("SELECT * FROM css").fetchall()
-        for prop in cssProperties:
-            textcolorList.append(prop.textcolor)
-            backgroundcolorList.append(prop.backgroundcolor)
-            messageList.append(prop.message)
-            userlist.append(prop.loginuser)    
-        return render_template('home.html',textColor=textcolorList, backgroundColor=backgroundcolorList, text=messageList,userlist=userlist, username=entered_username, length=len(textcolorList) )
+        return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username, imagesList=imagesList )
     else:
-        return render_template('home.html', username = entered_username, length=len(textcolorList) )
+        return render_template('home.html', username = entered_username, length=len(messageList), imagesList=imagesList)
 
 '''This is for the root page'''
 @app.route('/', methods=["GET"])
@@ -83,7 +71,6 @@ def index():
 '''This is for the login page'''
 @app.route('/login', methods=["POST"])
 def login():
-    print(request.method)
     global entered_password, entered_username
     entered_username = request.form.get('email')
     entered_password = request.form.get('pass')
@@ -174,6 +161,21 @@ def register():
 		else:
 			return render_template('register.html',failure_message="Error while user addition")
 	return render_template('register.html')
+
+@app.route('/delete_post/<int:id>', methods=["POST"])
+def delete_post(id):
+    #Delete the entry from database
+    db.execute("DELETE FROM css WHERE id=:id",{"id":id})
+    db.commit()
+    #Now reload all the data again
+    cssProperties = db.execute("SELECT * FROM css").fetchall()
+    #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username )
+    return redirect(url_for('home'))
+
+@app.route('/backgroundselection/<string:img_name>', methods=["POST"])
+def backgroundselection(img_name):
+    print(img_name + " Hello ")
+    return redirect(url_for('home'))
 
 #This function is for sending of email
 def sendEmail(email):
