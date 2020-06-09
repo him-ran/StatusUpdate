@@ -41,7 +41,7 @@
 					
 								<!--For the email text box-->
 								<div class="login-wrap-input100 validate-input">
-									<input class="input100 has-val" type="text" name="username">
+									<input class="input100 has-val" type="text" name="recovery_username">
 									<span class="focus-input100"></span>
 									<span class="label-input100">Username</span>
 								</div>
@@ -54,8 +54,12 @@
 								</div>
 								<br>
 								
-                                {% if message != None %}
-                                    {{message}}
+								{% if message != None %}
+									{% if "Success" in message %}
+										Password: {{ password }}
+									{% else %}
+										{{ message }}
+									{% endif %}
                                 {% endif %}
 				</form>
 				

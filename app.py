@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://wwrbwqttpywumi:a3a8fbe6d6414d66eb3df2de27495158d4e7566ecb4b0151d8ec7bde0a9979be@ec2-3-231-16-122.compute-1.amazonaws.com/d141a4s5ol22hi"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -27,12 +27,11 @@ entered_password = " "
 admin_user = "Admin"
 admin_password = "Admin123"
 status=False
-img_name=""
 
 '''This is for the homepage'''
 @app.route('/home', methods=["GET", "POST"])
 def home():
-    print(img_name)
+    
     idList = []
     messageList=[]
     userlist=[]
@@ -45,9 +44,8 @@ def home():
     if request.method == "POST":
         #To fetch the values from the textbox
         message = request.form.get('text')
-        print(message)
         '''Insert into Db for the css property'''
-        db.execute("INSERT INTO css (message, loginuser) VALUES (:message, :loginuser)", {"message":message, "loginuser":entered_username})
+        db.execute("INSERT INTO css (message, loginuser, backgroundimage) VALUES (:message, :loginuser, :backgroundimage)", {"message":message, "loginuser":entered_username, "backgroundimage":imagesList[4]})
         db.commit()
 
         #Need to fetch all the data stored values in the db\        
@@ -62,7 +60,6 @@ def home():
 '''This is for the root page'''
 @app.route('/', methods=["GET"])
 def index():
-    print(request.method)
     if request.method == "POST":
         return redirect(url_for('login'))
     return render_template('login.html',error_message= "", status=status)
@@ -114,12 +111,13 @@ def login():
 @app.route('/recover', methods=["GET","POST"])
 def recover():
     if request.method == "POST":
-        recovery_email = request.form.get("recovery_email")
-        email_received = sendEmail(recovery_email)
-        if email_received:
-            return render_template('recover.html',message="Success")
+        recovery_username = request.form.get("recovery_username")
+        command = "SELECT password FROM users WHERE username = '"+str(recovery_username + "'")
+        recovery_password = db.execute(command).fetchone()      
+        if recovery_password is not None:
+            return render_template('recover.html',message="Success, your password is writtten below:", password=recovery_password[0])
         else:
-            return render_template('recover.html',message="Failure")
+            return render_template('recover.html',message="Failure, No user with such username.")
         
     else:
         return render_template('recover.html')
@@ -162,20 +160,19 @@ def register():
 			return render_template('register.html',failure_message="Error while user addition")
 	return render_template('register.html')
 
-@app.route('/delete_post/<int:id>', methods=["POST"])
+@app.route('/delete_post/<int:id>', methods=["GET","POST"])
 def delete_post(id):
     #Delete the entry from database
     db.execute("DELETE FROM css WHERE id=:id",{"id":id})
     db.commit()
     #Now reload all the data again
     cssProperties = db.execute("SELECT * FROM css").fetchall()
-    #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username )
+    #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
     return redirect(url_for('home'))
 
-@app.route('/backgroundselection/<string:img_name>', methods=["POST"])
+@app.route('/backgroundselection/<string:img_name>', methods=["GET","POST"])
 def backgroundselection(img_name):
-    print(img_name + " Hello ")
-    return redirect(url_for('home'))
+    return img_name
 
 #This function is for sending of email
 def sendEmail(email):
