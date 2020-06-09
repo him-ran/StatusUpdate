@@ -50,8 +50,13 @@
 								<div class="container-login100-form-btn">
 									<button type="submit" class="login100-form-btn">
 										Submit
-									</button>
+									</button>									
 								</div>
+								<br>
+								<div class="container-login100-form-btn">
+								<button class="login100-form-btn" style="text-align:center;color: black;"><a href="{{url_for('index')}}">Move to Login Page</a></button>
+								</div>
+								
 								<br>
 								
 								{% if message != None %}
@@ -63,12 +68,14 @@
                                 {% endif %}
 				</form>
 				
+				
 
 				<div class="login100-more" style="background-image: url('static/images/bg-01.jpg');">
 				</div>
 			</div>
 		</div>
 	</div>
+	
 	
 
 </body>
