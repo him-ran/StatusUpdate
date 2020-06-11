@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -27,35 +27,27 @@ entered_password = " "
 admin_user = "Admin"
 admin_password = "Admin123"
 status=False
+selectedImage = ""
 
 '''This is for the homepage'''
 @app.route('/home', methods=["GET", "POST"])
 def home():
-    
-    idList = []
-    messageList=[]
-    userlist=[]
     #get the images list
     imagesList = os.getcwd()
     imagesList = (os.listdir(imagesList + "/static/images"))
     global entered_username
-    if entered_username == None or entered_username == " " :
-            return render_template('error.html', error_message="Please login first")
     if request.method == "POST":
         #To fetch the values from the textbox
         message = request.form.get('text')
         '''Insert into Db for the css property'''
-        db.execute("INSERT INTO css (message, loginuser, backgroundimage) VALUES (:message, :loginuser, :backgroundimage)", {"message":message, "loginuser":entered_username, "backgroundimage":imagesList[4]})
+        db.execute("INSERT INTO css (message, loginuser, backgroundimage) VALUES (:message, :loginuser, :backgroundimage)", {"message":message, "loginuser":entered_username, "backgroundimage":selectedImage})
         db.commit()
 
         #Need to fetch all the data stored values in the db\        
         cssProperties = db.execute("SELECT * FROM css").fetchall()
-        return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username, imagesList=imagesList )
-    elif request.method == "GET":
-        cssProperties = db.execute("SELECT * FROM css").fetchall()
-        return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username, imagesList=imagesList )
+        return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username, imagesList=imagesList )
     else:
-        return render_template('home.html', username = entered_username, length=len(messageList), imagesList=imagesList)
+        return render_template('home.html', username = entered_username, imagesList=imagesList)
 
 '''This is for the root page'''
 @app.route('/', methods=["GET"])
@@ -94,16 +86,16 @@ def login():
                 user_password = db.execute(command).fetchone()[0]
                 #Matching for the password entered and password fetched from the DB.
                 if entered_password == user_password:
-                    return redirect(url_for('home'))
+                    return redirect(url_for('message'))
                 else:
                     
                     return render_template('login.html', error_message="Invalid username or password.")
-                    return redirect(url_for('index'))
+                    return redirect(url_for('message'))
 
             else:
                 
                 return render_template('login.html', error_message="Invalid username or password.")
-                return redirect(url_for('index'))
+                return redirect(url_for('message'))
     else:
         return render_template('login.html',error_message= "", status=status)
 
@@ -172,7 +164,20 @@ def delete_post(id):
 
 @app.route('/backgroundselection/<string:img_name>', methods=["GET","POST"])
 def backgroundselection(img_name):
-    return img_name
+    global selectedImage
+    selectedImage = img_name
+    return redirect(url_for('home'))
+
+@app.route('/messages', methods=["GET","POST"])
+def message():
+    if entered_username == None or entered_username == " " :
+            return render_template('error.html', error_message="Please login first")
+    if request.method == "GET":
+        cssProperties = db.execute("SELECT * FROM css").fetchall()
+        return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
+    return render_template('messages.html', username = entered_username)
+
+
 
 #This function is for sending of email
 def sendEmail(email):

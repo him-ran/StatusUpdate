@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <p style="font-family: fantasy; font-size: x-large; color: tomato;text-align: center;">Recently updated messages:
+        Wanna add your favourite message, or share what's in your mind? Please feel free to move to the Status Update Tab.</p>
+    <br><br>
+
+    <!-- For the message display -->
+    {% if length != None %}
+    <div style="display: flex;flex-wrap: wrap;">
+        {% for i in fetchedList %}
+            <div class="fetchllist onhover" style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover;">
+                <h4>{{ i.message }}</h4>
+                <h5 style="padding-top: 130px;">By, {{ i.loginuser }}</h5>
+            </div> 
+            <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+                <div style="display: flex;">
+                    <button class="btn btn-danger">Delete</button>
+                </div>
+            </form>                      
+        {% endfor %}
+    </div>                
+    {% endif %}  
+{% endblock %}

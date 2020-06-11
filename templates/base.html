@@ -31,8 +31,15 @@
 </head>
 <!--Code for header-->
 <nav class="header">
-    Your Work,
-    <button style="float: right; color: antiquewhite;"><a href="{{url_for('index')}}">Logout</a></button>
+    <div style="display: flex;size: 10%;">Welcome to Your Thoughts,</div>
+    
+</nav>
+<nav style="background-color: black;color: white;">
+    <div class="navbar">
+        <a href="{{ url_for('message')}}">Message</a>
+        <a href="{{ url_for('home')}}">Status Update</a>      
+        <a href="{{url_for('index')}}">Logout</a>
+    </div>
 </nav>
 <body>
     {% block body %}
@@ -40,6 +47,7 @@
 </body>
 <!--Code for footer-->
 <nav class="footer">
-    This is the Footer
+    <p>Author: Himanshu Ranjan<br>
+    <a href="mailto:ranjan.himanshu9@gmail.com">ranjan.himanshu9@gmail.com</a></p>
 </nav>
 </html>
