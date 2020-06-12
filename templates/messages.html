@@ -10,8 +10,8 @@
     <div style="display: flex;flex-wrap: wrap;">
         {% for i in fetchedList %}
             <div class="fetchllist onhover" style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover;">
-                <h4>{{ i.message }}</h4>
-                <h5 style="padding-top: 130px;">By, {{ i.loginuser }}</h5>
+                <h5>{{ i.message }}</h5>
+                <h5 style="padding-top: 10%;">By, {{ i.loginuser }}</h5>
             </div> 
             <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
                 <div style="display: flex;">
