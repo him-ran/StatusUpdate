@@ -286,7 +286,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  width: 20%;
+  width: 50%;
   height: 80px;
   position: relative;
   border: 1px solid #e6e6e6;
@@ -661,12 +661,14 @@ input.input100 {
   margin: 10px;
   border-radius:10px; 
   text-align:center;
-   height:200px; 
-   padding: 8%; 
-   background-size:cover;
+  padding: 8%; 
+  width:20%;
+  height: auto;
+  background-size:cover;
 }
 .onhover:hover{
-  color:white
+  color:white;
+  display:block
 }
 
 /* Style the top navigation bar */

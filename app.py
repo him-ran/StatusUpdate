@@ -10,9 +10,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -90,12 +90,12 @@ def login():
                 else:
                     
                     return render_template('login.html', error_message="Invalid username or password.")
-                    return redirect(url_for('message'))
+                    #return redirect(url_for('message'))
 
             else:
                 
                 return render_template('login.html', error_message="Invalid username or password.")
-                return redirect(url_for('message'))
+                #return redirect(url_for('message'))
     else:
         return render_template('login.html',error_message= "", status=status)
 

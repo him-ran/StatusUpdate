@@ -10,14 +10,17 @@
     <div style="display: flex;flex-wrap: wrap;">
         {% for i in fetchedList %}
             <div class="fetchllist onhover" style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover;">
-                <h5>{{ i.message }}</h5>
-                <h5 style="padding-top: 10%;">By, {{ i.loginuser }}</h5>
-            </div> 
-            <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-                <div style="display: flex;">
-                    <button class="btn btn-danger">Delete</button>
+                <div style="word-wrap: break-word;">
+                    <h6>{{ i.message }}</h6>
+                    <h6 style="padding-top: 5%;">{{ i.loginuser.capitalize() }}</h6>
+                    <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+                        <button class=" btn btn-danger">Delete</button>
+                    </form>
                 </div>
-            </form>                      
+                
+            </div>
+            
+                                  
         {% endfor %}
     </div>                
     {% endif %}  
