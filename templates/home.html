@@ -1,52 +1,52 @@
 {% extends 'base.html' %}
 
 {% block body %}
-    
-                <br>
-                <h4 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Hello by Your Words: </h4>
-                <hr>
-                <p>
-                    <b>So, how this works is, you have to type a message which you want to display or convey to someone you want.
-                    You can write any message you want in the textbox provided below.</b>
-                </p>
-                
-                <div>
-                    Select an image from below to choose your best background-image
-                    <div style="display: flex;flex-wrap: wrap;">
-                        {% for image in imagesList %}
-                        
-                            {% if '.jpeg' in image %}
-                            <form action="{{ url_for('backgroundselection', img_name=image )}}">
-                                <div style="margin: 8px;">
-                                    <img style="width: 200px;height: 200px;" src="../static/images/{{image}}">                                    
-                                    <button class="btn btn-primary">Select</button>                                  
-                                </div>
-                                  
-                            </form>
-                            
-                            {% endif %}
-                        {% endfor %}
-                    
-                    </div>
-                    
-                </div>
-                <form action="{{url_for('home')}}" method="POST">
-                        <!--For text color -->
-                        <div style="display: flex">
-                            <!--For the message -->
-                            <div style="margin: 10px;margin-left: 20%" class="wrap-input100 validate-input ">
-                                <input class="input100 has-val"  type="text" name="text">
-                                <span class="focus-input100"></span>
-                                <span class="label-input100">Message</span>
-                            </div>
-                        </div>
-                        
-                        <!--for the submit button-->
-                        <div class="container-login100-form-btn">
-                            <button type="submit" class="login100-form-btn">
-                                Submit
-                            </button>
-                        </div>
-                </form>
-                <br>          
+
+<br>
+<h4 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Hello by Your Words: </h4>
+<hr>
+<p>
+    <b>So, how this works is, you have to type a message which you want to display or convey to someone you want.
+        You can write any message you want in the textbox provided below.</b>
+</p>
+
+<div>
+    Select an image from below to choose your best background-image
+    <div style="display: flex;flex-wrap: wrap;">
+        {% for image in imagesList %}
+
+        {% if '.jpeg' in image %}
+        <form action="{{ url_for('backgroundselection', img_name=image )}}">
+            <div style="margin: 8px;">
+                <img style="width: 200px;height: 200px;" src="../static/images/{{image}}">
+                <button class="btn btn-primary">Select</button>
+            </div>
+
+        </form>
+
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+</div>
+<form action="{{url_for('home')}}" method="POST">
+    <!--For text color -->
+    <div style="display: flex">
+        <!--For the message -->
+        <div style="margin: 10px;margin-left: 40%" class="wrap-input100 validate-input ">
+            <input class="input100 has-val" type="text" name="text">
+            <span class="focus-input100"></span>
+            <span class="label-input100">Message</span>
+        </div>
+    </div>
+
+    <!--for the submit button-->
+    <div class="container-login100-form-btn">
+        <button type="submit" class="login100-form-btn">
+            Submit
+        </button>
+    </div>
+</form>
+<br>
 {% endblock %}

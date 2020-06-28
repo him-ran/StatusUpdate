@@ -1,46 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ username.capitalize()  }}'s Thoughts</title>
-    <!--===============================================================================================-->	
-	<link rel="icon" href="{{ url_for('static', filename='images/icons/favicon.ico') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='images/icons/favicon.ico') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fonts/Linearicons-Free-v1.0.0/icon-font.min.css') }}">
-        
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='fonts/Linearicons-Free-v1.0.0/icon-font.min.css') }}">
+
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animsition/css/animsition.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/animate/animate.css') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
-    <!--===============================================================================================-->	
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='vendor/css-hamburgers/hamburgers.min.css') }}">
     <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slideshow.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='vendor/animsition/css/animsition.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css"
+        href="{{ url_for('static', filename='vendor/daterangepicker/daterangepicker.css') }}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/util.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/slideshow.css') }}">
     <!--===============================================================================================-->
 </head>
 <!--Code for header-->
 <nav class="header">
     <div style="display: flex;size: 10%;">Welcome to Your Thoughts,</div>
-    
+
 </nav>
 <nav style="background-color: black;color: white;">
     <div class="navbar">
         <a href="{{ url_for('message')}}">Message</a>
-        <a href="{{ url_for('home')}}">Status Update</a> 
+        <a href="{{ url_for('home')}}">Status Update</a>
         <a href="{{url_for('index')}}">Logout</a>
     </div>
 </nav>
+
 <body>
     {% block body %}
     {% endblock %}
@@ -48,6 +56,7 @@
 <!--Code for footer-->
 <nav class="footer">
     <p>Author: Himanshu Ranjan<br>
-    <a href="mailto:ranjan.himanshu9@gmail.com">ranjan.himanshu9@gmail.com</a></p>
+        <a href="mailto:ranjan.himanshu9@gmail.com">ranjan.himanshu9@gmail.com</a></p>
 </nav>
+
 </html>

@@ -286,7 +286,7 @@ iframe {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  width: 50%;
+  width: 20%;
   height: 80px;
   position: relative;
   border: 1px solid #e6e6e6;
@@ -654,21 +654,25 @@ input.input100 {
   color: black;
   text-align: center;
   padding: 3px; 
-  position: fixed;  
+  position: static;  
 }
 
 .fetchllist {
   margin: 10px;
   border-radius:10px; 
   text-align:center;
-  padding: 8%; 
-  width:20%;
-  height: auto;
-  background-size:cover;
+   height:200px; 
+   padding: 8%; 
+   background-size:cover;
+}
+.delete {
+  display: none;
+}
+.delete:hover {
+  display: block
 }
 .onhover:hover{
   color:white;
-  display:block
 }
 
 /* Style the top navigation bar */
