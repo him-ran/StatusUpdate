@@ -160,7 +160,7 @@ def delete_post(id):
     #Now reload all the data again
     cssProperties = db.execute("SELECT * FROM css").fetchall()
     #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
-    return redirect(url_for('home'))
+    return redirect(url_for('message'))
 
 @app.route('/backgroundselection/<string:img_name>', methods=["GET","POST"])
 def backgroundselection(img_name):
@@ -176,7 +176,6 @@ def message():
         cssProperties = db.execute("SELECT * FROM css").fetchall()
         return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
     return render_template('messages.html', username = entered_username)
-
 
 
 #This function is for sending of email
