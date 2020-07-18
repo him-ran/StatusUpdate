@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 
 {% block body %}
+<style>
+    .button {
+  display: none;
+}
+.wrapper:hover .button {
+  display: inline-block;
+}
+</style>
 
 <p style="font-family: fantasy; font-size: x-large; color: tomato;text-align: center;">Recently updated messages:
     Wanna add your favourite message, or share what's on your mind? Feel free to move to the Status Update Tab.</p>
@@ -8,23 +16,28 @@
 
 <!-- For the message display -->
 {% if length != None %}
-<div style="display: flex;flex-wrap: wrap;">
+<div style="display: flex;flex-wrap: wrap;" class="wrapper" >
     {% for i in fetchedList %}
-    <div class="fetchllist onhover "
-        style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover;">
+    <div class="fetchllist"
+        style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover; color: blanchedalmond;">
         <h5>{{ i.message }}</h5>
-        <h5 style="padding-top: 5%;">By, {{ i.loginuser }}</h5>
-        <div class="delete">
-            <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-                <div>
-                    <button class=" btn btn-danger">Delete</button>
-                </div>
-            </form>
-        </div>
-
+        <h5 style="padding-top: 5%;">By, {{ i.loginuser }}</h5>     
+    </div>
+    <div style="display: inline;" class="button">
+        <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+            <div style="display: flex; flex-direction: column;">
+                {% if i.loginuser == username %}
+                <button class="btn btn-danger button" style="margin: 5px;">Delete</button>
+                {% endif %}
+                <button class="btn btn-success button" style="margin: 5px;">Like</button>
+                <button class="btn btn-success button" style="margin: 5px;">Share</button>
+                
+                
+            </div>
+        </form>
     </div>
 
     {% endfor %}
 </div>
-{% endif %}
+{% endif %} 
 {% endblock %}
