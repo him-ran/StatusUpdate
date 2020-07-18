@@ -16,7 +16,7 @@
 
 <!-- For the message display -->
 {% if length != None %}
-<div style="display: flex;flex-wrap: wrap;" class="wrapper" >
+<div style="display: flex;flex-wrap: wrap;" >
     {% for i in fetchedList %}
     <div class="fetchllist"
         style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover; color: blanchedalmond;">
@@ -25,15 +25,15 @@
     </div>
     <div style="display: inline;" class="button">
         <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-            <div style="display: flex; flex-direction: column;">
+            
                 {% if i.loginuser == username %}
-                <button class="btn btn-danger button" style="margin: 5px;">Delete</button>
-                {% endif %}
-                <button class="btn btn-success button" style="margin: 5px;">Like</button>                
-            </div>
+                <button class="btn btn-danger " style="margin: 5px;"><span class="glyphicon glyphicon-trash"></span></button>
+                {% endif %}  
+        </form>
+        <form action="{{ url_for('like_post',id=i.id) }}" method="GET"> 
+            <button class="btn btn-success " style="margin: 5px;"><span class="glyphicon glyphicon-thumbs-up"></span><h5>{{ i.likecount }}</h5></button>
         </form>
     </div>
-
     {% endfor %}
 </div>
 {% endif %} 

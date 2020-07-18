@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ username.capitalize()  }}'s Thoughts</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <!--===============================================================================================-->
     <link rel="icon" href="{{ url_for('static', filename='images/icons/favicon.ico') }}">
     <!--===============================================================================================-->
@@ -49,7 +50,7 @@
     </div>
 </nav>
 
-<body>
+<body style="background-color: black;height: 100%;width: 100%;">
     {% block body %}
     {% endblock %}
 </body>

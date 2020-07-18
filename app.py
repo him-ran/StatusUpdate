@@ -177,7 +177,20 @@ def message():
         return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
     return render_template('messages.html', username = entered_username)
 
-
+@app.route('/like_post/<int:id>', methods=["GET","POST"])
+def like_post(id):
+    #Get the current count from database
+    db_like_count = db.execute("SELECT likecount FROM css WHERE id=:id",{"id":id}).fetchone()
+    db.commit()
+    #Now add one increment to the fetched value and then store it back to the DB
+    like_count = db_like_count[0] + 1 
+    # command_upadte = "UPDATE css SET likecount="+str(like_count)+" WHERE id="+str(id)
+    cssProperties = db.execute("UPDATE css SET likecount=:like_count WHERE id=:id",{"like_count":like_count, "id":id})
+    db.commit()
+    #Now to fetch again all the values
+    cssProperties = db.execute("SELECT * FROM css").fetchall()
+    #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
+    return redirect(url_for('message'))
 #This function is for sending of email
 def sendEmail(email):
         return 'True'
