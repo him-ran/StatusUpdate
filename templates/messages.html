@@ -26,24 +26,23 @@
             <div style="text-align:center;margin: 40%;">
                 <h3>{{ i.message }}</h3>
             </div>
-        </div>
-        <div style="display: flex;flex-direction: row;align-content: center;padding-left: 40%;background-color: pink;border-radius: 10px;margin-top: 5px;" class="button">
-            <div>
-                <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-
-                    {% if i.loginuser == username %}
-                    <button class="btn btn-danger " style="margin: 5px;"><span
-                            class="glyphicon glyphicon-trash"></span></button>
-                    {% endif %}
-                </form>
+            <div style="display: flex;flex-direction: row; justify-content: space-between; ">
+                <div >
+                    <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+    
+                        {% if i.loginuser == username %}
+                        <button class="btn " style="margin: 2px;"><img style="height: 30px;width: 30px;" src='/static/images/trash.svg'></button>
+                        {% endif %}
+                    </form>
+                </div>
+                <div>
+                    <form action="{{ url_for('like_post',id=i.id) }}" method="GET">
+                        <button class="btn " style="margin: 2px;"><img style="height: 30px;width: 30px; display: inline;" src='/static/images/like.svg'><h3 style="height: 30px;width: 30px; padding-top: 4px; display: inline;">{{ i.likecount }}</h3></button>
+                    </form>
+                </div>
             </div>
-            <div>
-                <form action="{{ url_for('like_post',id=i.id) }}" method="GET">
-                    <button class="btn btn-success glyphicon glyphicon-thumbs-up" style="margin: 5px;"><h3>{{ i.likecount }}</h3></button>
-                </form>
-            </div>
+            
         </div>
-
     </div>
 
     {% endfor %}
