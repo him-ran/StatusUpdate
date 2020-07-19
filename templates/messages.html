@@ -3,11 +3,12 @@
 {% block body %}
 <style>
     .button {
-  display: none;
-}
-.wrapper:hover .button {
-  display: inline-block;
-}
+        display: none;
+    }
+
+    .wrapper:hover .button {
+        display: inline-block;
+    }
 </style>
 
 <p style="font-family: fantasy; font-size: x-large; color: tomato;text-align: center;">Recently updated messages:
@@ -16,25 +17,36 @@
 
 <!-- For the message display -->
 {% if length != None %}
-<div style="display: flex;flex-wrap: wrap;" >
+<div style="display: flex;flex-wrap: wrap;flex-direction: row;">
     {% for i in fetchedList %}
-    <div class="fetchllist"
-        style="background-image: url('/static/images/{{ i .backgroundimage }}'); background-size: cover; color: blanchedalmond;">
-        <h5>{{ i.message }}</h5>
-        <h5 style="padding-top: 5%;">By, {{ i.loginuser }}</h5>     
+    <div style="display: flex;flex-direction: column;padding: 2%;">
+        <h3 style="color: powderblue;">{{ i.loginuser.capitalize() }} updated Status: </h3> 
+        <br>
+        <div style="background-image: url('/static/images/{{ i .backgroundimage }}');background-size: cover;text-align:center; color: blanchedalmond;border-radius:10px;width: 300px;height: 300px;;">
+            <div style="text-align:center;margin: 40%;">
+                <h3>{{ i.message }}</h3>
+            </div>
+        </div>
+        <div style="display: flex;flex-direction: row;align-content: center;padding-left: 40%;background-color: pink;border-radius: 10px;margin-top: 5px;" class="button">
+            <div>
+                <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+
+                    {% if i.loginuser == username %}
+                    <button class="btn btn-danger " style="margin: 5px;"><span
+                            class="glyphicon glyphicon-trash"></span></button>
+                    {% endif %}
+                </form>
+            </div>
+            <div>
+                <form action="{{ url_for('like_post',id=i.id) }}" method="GET">
+                    <button class="btn btn-success glyphicon glyphicon-thumbs-up" style="margin: 5px;"><h3>{{ i.likecount }}</h3></button>
+                </form>
+            </div>
+        </div>
+
     </div>
-    <div style="display: inline;" class="button">
-        <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-            
-                {% if i.loginuser == username %}
-                <button class="btn btn-danger " style="margin: 5px;"><span class="glyphicon glyphicon-trash"></span></button>
-                {% endif %}  
-        </form>
-        <form action="{{ url_for('like_post',id=i.id) }}" method="GET"> 
-            <button class="btn btn-success " style="margin: 5px;"><span class="glyphicon glyphicon-thumbs-up"></span><h5>{{ i.likecount }}</h5></button>
-        </form>
-    </div>
+
     {% endfor %}
 </div>
-{% endif %} 
+{% endif %}
 {% endblock %}
