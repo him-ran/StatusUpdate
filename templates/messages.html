@@ -22,27 +22,39 @@
     <div style="display: flex;flex-direction: column;padding: 2%;">
         <h3 style="color: powderblue;">{{ i.loginuser.capitalize() }} updated Status: </h3> 
         <br>
-        <div style="background-image: url('/static/images/{{ i .backgroundimage }}');background-size: cover;text-align:center; color: blanchedalmond;border-radius:10px;width: 300px;height: 300px;;">
-            <div style="text-align:center;margin: 40%;">
-                <h3>{{ i.message }}</h3>
-            </div>
-            <div style="display: flex;flex-direction: row; justify-content: space-between; ">
-                <div >
-                    <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
-    
-                        {% if i.loginuser == username %}
-                        <button class="btn " style="margin: 2px;"><img style="height: 30px;width: 30px;" src='/static/images/trash.svg'></button>
-                        {% endif %}
-                    </form>
-                </div>
-                <div>
-                    <form action="{{ url_for('like_post',id=i.id) }}" method="GET">
-                        <button class="btn " style="margin: 2px;"><img style="height: 30px;width: 30px; display: inline;" src='/static/images/like.svg'><h3 style="height: 30px;width: 30px; padding-top: 4px; display: inline;">{{ i.likecount }}</h3></button>
-                    </form>
-                </div>
-            </div>
-            
+        <div style="background-image: url('/static/images/{{ i .backgroundimage }}');background-size: cover;text-align:center; color: blanchedalmond;border-radius:10px;width: 300px;height: auto;;">
+            <div style="text-align:center;margin: 20%;">
+                <h3 style="overflow-wrap: anywhere;">{{ i.message }}</h3>
+            </div>            
         </div>
+        <!-- <div style="display: flex;flex-direction:row;background-color: blanchedalmond;margin: 5px;height: 30px;border-radius: 5px;"  class="button">
+            <div>
+                <h4>Liked By: </h4>
+            {% for name in i.likenames %} 
+
+            <h4>{{i.likenames }}</h4>
+            {% endfor %}
+            </div> 
+            
+            
+        </div> -->
+        <div style="display: flex;flex-direction: row;background-color: black;border-radius: 10px;margin-top: 5px;justify-content: space-between;" class="button">
+            <div title="Liked By : {{ i.likenames }}">
+                <form action="{{ url_for('like_post',id=i.id) }}" method="GET">
+                    <button class="btn" style="margin: 2px;"><img style="height: 30px;width: 30px; display: inline;" src='/static/images/like.svg'><h3 style="height: 30px;width: 30px; padding-top: 4px; display: inline;color: white;">{{ i.likecount }}</h3></button>
+                </form>
+            </div>
+            <div>
+                <form action="{{ url_for('delete_post', id=i.id ) }}" method="GET">
+
+                    {% if i.loginuser == username %}
+                    <button class="btn" title="Delete" style="margin: 2px;"><img style="height: 30px;width: 30px;" src='/static/images/trash.svg'></button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+        
+
     </div>
 
     {% endfor %}

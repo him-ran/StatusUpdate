@@ -1,8 +1,14 @@
 from flask import Flask, render_template, request, redirect, url_for
-import os
+import cv2, os ,datetime
 
 '''Libraries required for connection of postgreSQL database Need to install sqlalchemy and psycopg2
 Command : pip install sqlalchemy psycopg2'''
+
+'''
+Way to add a column to store array in postgreSQL
+flask=# ALTER TABLE public.css
+flask-# ADD COLUMN likenames TEXT [] DEFAULT array[]::varchar[];
+'''
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -10,9 +16,9 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 #Method to have an authenticated connection to the database
 #template : engine = create_engine('postgresql+psycopg2://user:password@hostname/database_name')
 #Connectionto the Local Database
-#os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
+os.environ['DATABASE_URL'] = "postgresql+psycopg2://postgres:mutemath966@@localhost/flask"
 #Connection to Heroku database
-os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
+#os.environ['DATABASE_URL'] = "postgresql+psycopg2://ygxlhfqvqavygx:c8e92f760da666fa8457f28e9bbf9c7e5e4c11dd087409cdbeaba31b844be85a@ec2-18-211-48-247.compute-1.amazonaws.com:5432/d6sv13havqsimc"
 
 #for establising connection to the DB
 engine = create_engine(os.getenv('DATABASE_URL'))
@@ -28,6 +34,7 @@ admin_user = "Admin"
 admin_password = "Admin123"
 status=False
 selectedImage = ""
+like_list = []
 
 '''This is for the homepage'''
 @app.route('/home', methods=["GET", "POST"])
@@ -174,26 +181,60 @@ def message():
             return render_template('error.html', error_message="Please login first")
     if request.method == "GET":
         cssProperties = db.execute("SELECT * FROM css").fetchall()
-        return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
-    return render_template('messages.html', username = entered_username)
+        return render_template('messages.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username,likelist="")
+    return render_template('messages.html', username = entered_username,likelist="")
 
 @app.route('/like_post/<int:id>', methods=["GET","POST"])
 def like_post(id):
+    '''
+    To implement the names of the user who liked a
+    ''' 
     #Get the current count from database
-    db_like_count = db.execute("SELECT likecount FROM css WHERE id=:id",{"id":id}).fetchone()
+    db_like_count = db.execute("SELECT * FROM css WHERE id=:id",{"id":id}).fetchone()
     db.commit()
-    #Now add one increment to the fetched value and then store it back to the DB
-    like_count = db_like_count[0] + 1 
-    # command_upadte = "UPDATE css SET likecount="+str(like_count)+" WHERE id="+str(id)
-    cssProperties = db.execute("UPDATE css SET likecount=:like_count WHERE id=:id",{"like_count":like_count, "id":id})
-    db.commit()
+    #Now add one increment to the fetched value and then store it back to the DB 
+    like_list = db_like_count[5]
+    #To enter the name of the user that has liked the post, Only new entries to be added to the List.
+    if entered_username not in like_list:
+        like_list.append(entered_username)
+        like_count = db_like_count[4] + 1
+        # command_upadte = "UPDATE css SET likecount="+str(like_count)+" WHERE id="+str(id)
+        cssProperties = db.execute("UPDATE css SET likecount=:like_count, likenames=:like_names WHERE id=:id",{"like_count":like_count, "like_names":like_list, "id":id})
+        db.commit()
     #Now to fetch again all the values
     cssProperties = db.execute("SELECT * FROM css").fetchall()
     #return render_template('home.html', fetchedList = cssProperties, length=len(cssProperties), username=entered_username)
     return redirect(url_for('message'))
+
 #This function is for sending of email
 def sendEmail(email):
         return 'True'
+        
+@app.route('/opencamera', methods=["GET","POST"])
+def opencamera():
+    cam = cv2.VideoCapture(0)
+    cv2.namedWindow("Please Smile....")
+    while True:
+        ret, frame = cam.read()
+        cv2.imshow("Please Smile....", frame)
+        if not ret:
+            break
+        k = cv2.waitKey(1)
+
+        if k%256 == 27:
+            # ESC pressed
+            print("Escape hit, closing...")
+            break
+        elif k%256 == 32:
+            # SPACE pressed
+            img_counter = datetime.datetime.now()
+            img_counter = img_counter.strftime("%H_%I_%S_%p")
+            img_name = "Image_{}.png".format(img_counter)
+            cv2.imwrite(os.getcwd() + '/static/images/' + img_name, frame)
+            print("{} written!".format(img_name))
+    cam.release()
+    cv2.destroyAllWindows() 
+    return redirect(url_for('home'))
 
 if __name__ == "__main__":
 	app.run()

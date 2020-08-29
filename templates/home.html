@@ -3,15 +3,17 @@
 {% block body %}
 
 <br>
-<h4 style="font-family:Verdana, Geneva, Tahoma, sans-serif;">Hello by Your Thoughts </h4>
+<h2 style="font-family:Verdana, Geneva, Tahoma, sans-serif;color: cornsilk;">Hello by Your Thoughts </h2>
 <hr>
 <p>
-    <b>So, how this works is, you have to type a message which you want to display or convey to someone you want.
+    <b style="color: cornsilk;">So, how this works is, you have to type a message which you want to display or convey to
+        someone you want.
         You can write any message you want in the textbox provided below.</b>
 </p>
 
 <div>
-    Select an image from below to choose your best background-image
+    <p style="color: cornsilk;">Select from a wide range of Images available. We have still images, GIF in order to have
+        your funny, emotional, sad, and beautiful messages give a much more feeling to it.</p>
     <div style="display: flex;flex-wrap: wrap;">
         {% for image in imagesList %}
 
@@ -23,7 +25,38 @@
             </div>
 
         </form>
+        {% endif %}
+        {% endfor %}
+    </div>
+    <b style="color: cornsilk;">The GIF Pictures : </b>
+    <div style="display: flex;flex-wrap: wrap;">
+            {% for image in imagesList %}
 
+            {% if '.gif' in image %}
+            <form action="{{ url_for('backgroundselection', img_name=image )}}">
+                <div style="margin: 8px;">
+                    <img style="width: 200px;height: 200px;" src="../static/images/{{image}}">
+                    <button class="btn btn-primary">Select</button>
+                </div>
+
+            </form>
+            {% endif %}
+            {% endfor %}
+    </div>
+    <b style="color: cornsilk;">Your Pictures : </b> 
+    <form action="{{ url_for('opencamera')}}"><button class="btn btn-primary">Add your own Picture</button></form>
+    <div style="display: flex;flex-wrap: wrap;">
+        
+        {% for image in imagesList %}
+
+        {% if '.png' in image and not 'trash.png' in image %}
+        <form action="{{ url_for('backgroundselection', img_name=image )}}">
+            <div style="margin: 8px;">
+                <img style="width: 200px;height: 200px;" src="../static/images/{{image}}">
+                <button class="btn btn-primary">Select</button>
+            </div>
+
+        </form>
         {% endif %}
         {% endfor %}
 
@@ -35,7 +68,7 @@
     <div style="display: flex">
         <!--For the message -->
         <div style="margin: 10px;margin-left: 40%" class="wrap-input100 validate-input ">
-            <input class="input100 has-val" type="text" name="text" style="color: white;">
+            <textarea class="input100 has-val" type="text" name="text" style="color: white;" rows="3"></textarea>
             <span class="focus-input100"></span>
             <span class="label-input100">Message</span>
         </div>

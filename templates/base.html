@@ -39,14 +39,15 @@
 </head>
 <!--Code for header-->
 <nav class="header">
-    <div style="display: flex;size: 10%;">Welcome to Your Thoughts,</div>
+    <div style="display: flex;font-size: 200%;">Welcome to Your Thoughts,</div>
 
 </nav>
 <nav style="background-color: black;color: white;">
     <div class="navbar">
-        <a href="{{ url_for('message')}}">Message</a>
+        <a href="{{ url_for('message')}}"> <b>Hello, {{ username.capitalize() }} </b></a>
         <a href="{{ url_for('home')}}">Status Update</a>
-        <a href="{{url_for('index')}}">Logout, {{ username }}</a>
+        
+        <a href="{{url_for('index')}}">Logout</a>
     </div>
 </nav>
 
